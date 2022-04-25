@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace TakeprofitTechnologyQuiz;
+﻿namespace TakeprofitTechnologyQuiz;
 
 public static class AnswerToUltimateQuestionOfLifeAndUniverse
 {
@@ -8,23 +6,37 @@ public static class AnswerToUltimateQuestionOfLifeAndUniverse
     {
         Console.WriteLine("** Answer for QWIZ  **\n\n\n");
         TakeprofitTechServerInteraction server = new TakeprofitTechServerInteraction();
-        List<string> dictionary = server.GetServerAnswersDictionary();
+        List<uint> dictionary = server.GetServerAnswersDictionary();
 
         if (dictionary != null)
         {
-            foreach (string answer in dictionary)
+            foreach (uint answer in dictionary)
             {
                 Console.WriteLine(answer);
             }
-            //Console.WriteLine($"Congratulations! The answer to the quiz is the number = {GetMediana(dictionary)}");
+
+            Console.WriteLine($"Congratulations! The answer to the quiz is the number = {GetMediana(dictionary)}");
             return;
         }
+
+        using (StreamWriter str = new StreamWriter("zadanie.txt", false))
+        {
+            foreach (var number in dictionary)
+            {
+                str.Write(number.ToString());
+            }
+
+            str.WriteLine($"\n\n Answer = {GetMediana(dictionary)}!");
+        }
+
+        Console.WriteLine("File writed!\n");
+
 
         Console.WriteLine("Failed to get number. An error occurred while getting data from the server!");
         Console.WriteLine("\n\n\n**********END*********");
     }
 
-    private static int GetMediana(List<int> numbers)
+    private static uint GetMediana(List<uint> numbers)
     {
         numbers.Sort();
 
@@ -37,5 +49,4 @@ public static class AnswerToUltimateQuestionOfLifeAndUniverse
         //"Четное"
         return (numbers[numbers.Count / 2 - 1] + numbers[numbers.Count / 2]) / 2;
     }
-
 }
